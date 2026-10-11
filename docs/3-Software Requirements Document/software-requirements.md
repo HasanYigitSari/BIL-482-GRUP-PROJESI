@@ -11,6 +11,7 @@
 | Full name | Student number | Contribution to this document |
 | --- | --- | --- |
 | Ömer Kılınç | 261111011 | Preparation of the initial requirements, use cases, interface and architecture descriptions, pattern mappings, and traceability. |
+| Hasan Yiğit Sarı | 231101050 | Created and integrated the visual Software Architecture Diagram and Item State Lifecycle Diagram. |
 
 ## Table of Contents
 
@@ -357,9 +358,17 @@ This organization separates interface work from inventory rules and supplier det
 
 ### 9.2 Architecture Diagram
 
-**Diagram artwork: planned.** The architecture diagram will show the React dashboard communicating with FastAPI, which manages business operations and PostgreSQL storage. A background worker evaluates replenishment strategies and obtains digital items through supplier adapters.
+**Software Architecture Diagram:**
 
-**Optional item state diagram: planned.** The state diagram will show an item transitioning from Available to Assigned, with Available to Invalidated under the proposed invalidation rule. Assigned and invalidated items retain their records and are excluded from available stock.
+![Software Architecture Diagram](./architecture-diagram.png)
+
+The architecture diagram shows the React dashboard communicating with FastAPI, which manages business operations and PostgreSQL storage. A background worker evaluates replenishment strategies and obtains digital items through supplier adapters.
+
+**Item State Lifecycle Diagram:**
+
+![Item State Diagram](./item-state-diagram.png)
+
+The state diagram shows an item transitioning from Available to Assigned, with Available to Invalidated under the proposed invalidation rule. Assigned and invalidated items retain their records and are excluded from available stock.
 
 ### 9.3 Architectural Components
 
@@ -494,7 +503,7 @@ These entries record preparation of this initial document. Diagram descriptions 
 | Describe the use case diagram and system boundary | Ömer Kılınç | Section 5 | Textual diagram description and actor/permission tables; Git commit pending. | Description prepared; artwork planned |
 | Define four use cases and functional requirements | Ömer Kılınç | Section 6 | Initial use case flows, exceptions, and FR-01 through FR-16; Git commit pending. | Initial draft prepared |
 | Define quality and interface requirements | Ömer Kılınç | Sections 7-8 | Initial requirements and interface tables; Git commit pending. | Initial draft prepared; listed decisions open |
-| Describe architecture and supporting diagrams | Ömer Kılınç | Section 9 | Component descriptions and interactions; Git commit pending. | Description prepared; artwork planned |
+| Describe architecture and supporting diagrams | Hasan Yiğit Sarı & Ömer Kılınç | Section 9 & architecture-diagram.png & item-state-diagram.png | System architecture diagram and item state diagram. Component descriptions and interactions; Git commit pending. | Description and artwork prepared |
 | Explain and justify pattern mappings | Ömer Kılınç | Section 10 | Four use case mappings and participant descriptions; Git commit pending. | Initial draft prepared |
 | Establish traceability and additional acceptance checks | Ömer Kılınç | Section 11 | Requirement/component/test mappings and planned checks; Git commit pending. | Initial draft prepared |
 | Prepare document structure and contribution records | Ömer Kılınç | Front matter, table of contents, and Section 12 | Initial content in this document; Git commit pending. | Initial draft prepared |
