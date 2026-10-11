@@ -81,7 +81,11 @@ Open decisions include the authentication mechanism, frontend framework, exact r
 
 ### 5.1 Diagram
 
-**Diagram artwork: planned.** The UML use case diagram will show Viewer, Operator, Administrator, and external supplier participation around the system boundary, connected to their relevant capabilities. Customers are stored records, and automatic replenishment operates within the system.
+**UML Use Case Diagram:**
+
+![UML Use Case Diagram](./use-case-diagram.png)
+
+The UML use case diagram shows Viewer, Operator, Administrator, and external supplier participation around the system boundary, connected to their relevant capabilities. Customers are stored records, and automatic replenishment operates within the system.
 
 ### 5.2 Actors and System Boundary
 
@@ -500,7 +504,7 @@ These entries record preparation of this initial document. Diagram descriptions 
 | Task | Responsible member | Document sections or files | Contribution evidence | Status |
 | --- | --- | --- | --- | --- |
 | Define product context, functions, users, and constraints | Ömer Kılınç | Sections 1-4 | Initial content in this document; Git commit pending. | Initial draft prepared |
-| Describe the use case diagram and system boundary | Ömer Kılınç | Section 5 | Textual diagram description and actor/permission tables; Git commit pending. | Description prepared; artwork planned |
+| Describe the use case diagram and system boundary | Hasan Yiğit Sarı | Section 5 & use-case-diagram.png | Use case diagram. Textual diagram description and actor/permission tables; Git commit pending. | Description and artwork prepared |
 | Define four use cases and functional requirements | Ömer Kılınç | Section 6 | Initial use case flows, exceptions, and FR-01 through FR-16; Git commit pending. | Initial draft prepared |
 | Define quality and interface requirements | Ömer Kılınç | Sections 7-8 | Initial requirements and interface tables; Git commit pending. | Initial draft prepared; listed decisions open |
 | Describe architecture and supporting diagrams | Hasan Yiğit Sarı & Ömer Kılınç | Section 9 & architecture-diagram.png & item-state-diagram.png | System architecture diagram and item state diagram. Component descriptions and interactions; Git commit pending. | Description and artwork prepared |
