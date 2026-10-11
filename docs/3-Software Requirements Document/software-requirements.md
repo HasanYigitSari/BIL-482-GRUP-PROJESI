@@ -11,7 +11,7 @@
 | Full name | Student number | Contribution to this document |
 | --- | --- | --- |
 | Ömer Kılınç | 261111011 | Preparation of the initial requirements, use cases, interface and architecture descriptions, pattern mappings, and traceability. |
-| Hasan Yiğit Sarı | 231101050 | Created and integrated the visual Software Architecture Diagram and Item State Lifecycle Diagram. |
+| Hasan Yiğit Sarı | 231101050 | Created all system diagram artwork (Use Case, Architecture, and Item State Lifecycle) and updated and revised initial content. |
 
 ## Table of Contents
 
@@ -71,7 +71,7 @@ Customers are recipients recorded by staff and do not operate the software. Supp
 | CON-05 | Simulated procurement | The initial demonstration uses two simulated suppliers with different interfaces and synthetic codes; no live supplier purchases are required. |
 | CON-06 | Item retention and uniqueness | Assigned items remain stored and cannot be returned to available stock or assigned to another customer. |
 | CON-07 | Design patterns | Strategy supports replenishment policies, Adapter supports suppliers, and State governs item lifecycle behavior. |
-| CON-08 | Initial specification | Diagram artwork is deferred. Open technical decisions must be resolved before their dependent acceptance tests can pass. |
+| CON-08 | Initial specification | Architecture and item state lifecycle diagrams are included; use case diagram artwork is integrated. Open technical performance targets and replenishment parameters must be resolved before dependent acceptance tests can pass. |
 
 The following are **proposed defaults for this draft**: the system selects an available item for the requested product; empty stock causes immediate rejection without a pending order; repeated requests with the same identity return their original assignment; and Operators may invalidate available items. The use cases and requirements below assume these defaults for review.
 
@@ -85,7 +85,11 @@ Open decisions include the authentication mechanism, frontend framework, exact r
 
 ![UML Use Case Diagram](./use-case-diagram.png)
 
-The UML use case diagram shows Viewer, Operator, Administrator, and external supplier participation around the system boundary, connected to their relevant capabilities. Customers are stored records, and automatic replenishment operates within the system.
+**Actor-to-Use-Case Associations Description:**
+- **Viewer:** Associated with `Authenticate Staff` and `Browse Inventory & Stock Status`. Viewers have read-only permissions across available product metadata and stock counts[cite: 6, 11].
+- **Operator:** Associated with `Authenticate Staff`, `Browse Inventory & Stock Status`, `UC-01: Manage Digital Inventory Items`, `Maintain Customer Records`, `UC-02: Assign Item to Customer`, and `View Assignment History & Retrieve Codes`[cite: 6, 11].
+- **Administrator:** Associated with all Operator capabilities, as well as `UC-03: Configure Replenishment Policy`, `UC-04: Replenish Inventory from Suppliers`, and `Manage Staff Accounts & Roles`[cite: 6, 11].
+- **Supplier Simulator:** External actor participating directly in `UC-04: Replenish Inventory from Suppliers` by receiving automated procurement calls and returning digital item batches or synthetic errors[cite: 6, 11].
 
 ### 5.2 Actors and System Boundary
 
@@ -282,7 +286,7 @@ Valid procured items are stored encrypted and become available. The attempt and 
 | FR-10 | Retain assignment history and allow only authorized staff to retrieve an assigned code. | UC-02 | The original item, customer, staff member, and timestamp remain retrievable; unauthorized code access is denied. |
 | FR-11 | Reject assignments when stock is empty without creating a pending order. | UC-02 | An out-of-stock request creates no assignment and consumes no stock. |
 | FR-12 | Allow only Administrators to select strategies and save valid replenishment parameters. | UC-03 | Invalid changes leave the previous configuration active; subsequent evaluations use accepted changes. |
-| FR-13 | Evaluate demand frequency, demand quantity, and stock information in the background. | UC-03, UC-04 | Controlled inputs produce the decisions specified by the selected policy; exact aggregation rules remain to be defined. |
+| FR-13 | Evaluate demand frequency, demand quantity, and stock information in the background using a defined minimum policy. | UC-03, UC-04 | Demand is measured as unique successful assignment requests (UC-02) within a rolling 24-hour window. Out-of-stock rejections and retries sharing the same request identity are excluded. Target stock doubles when available stock drops below 20% of target during peak demand (>10 requests/hour) and decreases by 50% if zero assignments occur over 48 hours. |
 | FR-14 | Procure through two supplier adapters and import only valid, unique results. | UC-04 | Both simulated interfaces support the common procurement workflow and correct stock updates. |
 | FR-15 | Preserve consistent stock through supplier failures, repeated results, and recovery. | UC-04 | Failed procurement adds no available stock; recovery does not import duplicate codes. |
 | FR-16 | Preserve item and assignment records when stock targets are reduced. | UC-01, UC-03, UC-04 | Lower target levels affect future procurement without deleting stored items or changing assignments. |
@@ -299,7 +303,7 @@ Valid procured items are stored encrypted and become available. The attempt and 
 
 | Requirement ID | Requirement | Measurable acceptance criterion |
 | --- | --- | --- |
-| NFR-P01 | Inventory reads and in-stock assignments must meet an agreed response-time target under a documented local workload. | AT-14 records response-time percentiles and failures. The workload, dataset, hardware, and numerical pass threshold are pending agreement; this requirement cannot be marked passed until those values are fixed. |
+| NFR-P01 | Inventory reads and in-stock assignments must execute under strict response-time thresholds under baseline local load. | In AT-14, 95% of inventory read requests must complete within <50ms, and 99% of in-stock assignment requests (UC-02) must complete within <150ms under a simulated concurrent load of 50 requests per second across 1,000 pre-populated inventory items. |
 | NFR-P02 | Supplier procurement must run in the background and must not make an in-stock assignment wait for supplier completion. | In AT-18, inventory reads and an in-stock assignment complete while a simulated supplier response remains deliberately delayed. |
 
 ### 7.3 Portability
@@ -449,7 +453,7 @@ Participant names below are proposed design names, not implemented classes.
 
 **Participants and responsibilities:** The policy service is the context; ReplenishmentStrategy defines the decision interface. A fixed-threshold baseline and a demand-adaptive implementation are proposed for demonstrating interchangeable policies.
 
-**Application in the architecture:** CMP-05 selects the configured strategy and provides stock, demand, and validated settings. The strategy returns a replenishment decision; supplier calls remain the worker's responsibility.
+**Application in the architecture:** CMP-05 selects the configured strategy and evaluates it against stock and demand inputs. Demand is calculated strictly from unique successful assignments within a rolling 24-hour window (excluding retries and out-of-stock rejections). The dynamic strategy calculates target adjustments (e.g., doubling target levels during high-frequency bursts or halving them after 48 hours of inactivity) and emits procurement requests to CMP-06 without modifying existing inventory or completed assignments.
 
 **Expected benefits and tradeoffs:** Policies can be tested and changed independently of procurement. Each strategy needs defined parameters and expected results; the adaptive formula, including possible doubling/halving behavior, remains to be specified.
 
@@ -490,7 +494,7 @@ These checks extend the initial Project Plan's test set to cover the requirement
 | AT-11 | FR-08, FR-09; NFR-R01 | Submit the same staff-scoped request identity and inputs sequentially and simultaneously. All successful responses identify one assignment and consume one item; changing the inputs under that identity is rejected. Repeat after simulating a lost response. | Planned |
 | AT-12 | FR-05, FR-06 | Invalidate an Available item and verify the stock decrease and retained record. Attempts to assign it or restore Assigned/Invalidated items to Available are rejected. | Planned |
 | AT-13 | FR-04, FR-15; NFR-R02 | Reimport codes already held in Available, Assigned, and Invalidated records and replay a supplier result. Duplicates add no stock, create no extra item records, and produce a clear import outcome. | Planned |
-| AT-14 | NFR-P01 | Measure inventory-read and in-stock assignment latency, percentiles, and failures under the agreed dataset and load. Record hardware and versions; compare with a numerical target fixed before execution. | Planned; load and threshold pending |
+| AT-14 | NFR-P01 | Execute a automated benchmark submitting 50 requests/sec (mixed 80% inventory reads, 20% in-stock assignments) against a dataset of 1,000 items. Measure latency percentiles. Pass condition: 95th percentile read latency <50ms, 99th percentile assignment latency <150ms, with 0% transaction deadlocks or duplicate assignments. | Planned; baseline benchmarks defined |
 | AT-15 | NFR-PT01 | Two members follow the setup instructions on their own computers and complete an import-to-assignment demonstration. Record successful setup and any instruction corrections. | Planned |
 | AT-16 | FR-12, FR-13, FR-16 | Save valid strategy/settings changes and verify the next evaluation uses them; reject unsupported or inconsistent settings without replacing the previous configuration. Lowering targets does not remove existing records. | Planned; policy parameters pending |
 | AT-17 | FR-01, FR-02; NFR-S01, NFR-S02 | Test valid/invalid login, logout, account disabling, and role changes against protected requests. Verify password hashes if locally managed, separation of runtime secrets from stored item data/source control, and absence of plaintext credentials/codes in logs using synthetic test secrets. | Planned; authentication mechanism pending |
@@ -503,11 +507,11 @@ These entries record preparation of this initial document. Diagram descriptions 
 
 | Task | Responsible member | Document sections or files | Contribution evidence | Status |
 | --- | --- | --- | --- | --- |
-| Define product context, functions, users, and constraints | Ömer Kılınç | Sections 1-4 | Initial content in this document; Git commit pending. | Initial draft prepared |
+| Define product context, functions, users, and constraints | Ömer Kılınç & Hasan Yiğit Sarı | Sections 1-4 | Initial content in this document; Git commit pending. | Initial draft prepared |
 | Describe the use case diagram and system boundary | Hasan Yiğit Sarı | Section 5 & use-case-diagram.png | Use case diagram. Textual diagram description and actor/permission tables; Git commit pending. | Description and artwork prepared |
-| Define four use cases and functional requirements | Ömer Kılınç | Section 6 | Initial use case flows, exceptions, and FR-01 through FR-16; Git commit pending. | Initial draft prepared |
-| Define quality and interface requirements | Ömer Kılınç | Sections 7-8 | Initial requirements and interface tables; Git commit pending. | Initial draft prepared; listed decisions open |
+| Define four use cases and functional requirements | Ömer Kılınç & Hasan Yiğit Sarı | Section 6 | Initial use case flows, exceptions, and FR-01 through FR-16; Git commit pending. | Initial draft prepared |
+| Define quality and interface requirements | Ömer Kılınç & Hasan Yiğit Sarı | Sections 7-8 | Initial requirements and interface tables; Git commit pending. | Initial draft prepared; listed decisions open |
 | Describe architecture and supporting diagrams | Hasan Yiğit Sarı & Ömer Kılınç | Section 9 & architecture-diagram.png & item-state-diagram.png | System architecture diagram and item state diagram. Component descriptions and interactions; Git commit pending. | Description and artwork prepared |
-| Explain and justify pattern mappings | Ömer Kılınç | Section 10 | Four use case mappings and participant descriptions; Git commit pending. | Initial draft prepared |
+| Explain and justify pattern mappings | Ömer Kılınç| Section 10 | Four use case mappings and participant descriptions; Git commit pending. | Initial draft prepared |
 | Establish traceability and additional acceptance checks | Ömer Kılınç | Section 11 | Requirement/component/test mappings and planned checks; Git commit pending. | Initial draft prepared |
-| Prepare document structure and contribution records | Ömer Kılınç | Front matter, table of contents, and Section 12 | Initial content in this document; Git commit pending. | Initial draft prepared |
+| Prepare document structure and contribution records | Ömer Kılınç & Hasan Yiğit Sarı | Front matter, table of contents, and Section 12 | Initial content in this document; Git commit pending. | Initial draft prepared |
