@@ -86,10 +86,10 @@ Open decisions include the authentication mechanism, frontend framework, exact r
 ![UML Use Case Diagram](./use-case-diagram.png)
 
 **Actor-to-Use-Case Associations Description:**
-- **Viewer:** Associated with `Authenticate Staff` and `Browse Inventory & Stock Status`. Viewers have read-only permissions across available product metadata and stock counts[cite: 6, 11].
-- **Operator:** Associated with `Authenticate Staff`, `Browse Inventory & Stock Status`, `UC-01: Manage Digital Inventory Items`, `Maintain Customer Records`, `UC-02: Assign Item to Customer`, and `View Assignment History & Retrieve Codes`[cite: 6, 11].
-- **Administrator:** Associated with all Operator capabilities, as well as `UC-03: Configure Replenishment Policy`, `UC-04: Replenish Inventory from Suppliers`, and `Manage Staff Accounts & Roles`[cite: 6, 11].
-- **Supplier Simulator:** External actor participating directly in `UC-04: Replenish Inventory from Suppliers` by receiving automated procurement calls and returning digital item batches or synthetic errors[cite: 6, 11].
+- **Viewer:** Associated with `Authenticate Staff` and `Browse Inventory & Stock Status`. Viewers have read-only permissions across available product metadata and stock counts.
+- **Operator:** Associated with `Authenticate Staff`, `Browse Inventory & Stock Status`, `UC-01: Manage Digital Inventory Items`, `Maintain Customer Records`, `UC-02: Assign Item to Customer`, and `View Assignment History & Retrieve Codes`.
+- **Administrator:** Associated with all Operator capabilities, as well as `UC-03: Configure Replenishment Policy`, `UC-04: Replenish Inventory from Suppliers`, and `Manage Staff Accounts & Roles`.
+- **Supplier Simulator:** External actor participating directly in `UC-04: Replenish Inventory from Suppliers` by receiving automated procurement calls and returning digital item batches or synthetic errors.
 
 ### 5.2 Actors and System Boundary
 
