@@ -357,7 +357,11 @@ This organization separates interface work from inventory rules and supplier det
 
 ### 9.2 Architecture Diagram
 
-**Diagram artwork: planned.** The architecture diagram will show the React dashboard communicating with FastAPI, which manages business operations and PostgreSQL storage. A background worker evaluates replenishment strategies and obtains digital items through supplier adapters.
+**Diagram artwork:**
+
+![Software Architecture Diagram](./architecture-diagram.png)
+
+The architecture diagram shows the React dashboard communicating with FastAPI, which manages business operations and PostgreSQL storage. A background worker evaluates replenishment strategies and obtains digital items through supplier adapters.
 
 **Optional item state diagram: planned.** The state diagram will show an item transitioning from Available to Assigned, with Available to Invalidated under the proposed invalidation rule. Assigned and invalidated items retain their records and are excluded from available stock.
 
