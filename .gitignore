@@ -1,0 +1,136 @@
+# Keep documentation sources, reference PDFs, and diagrams in Git.
+# Put generated exports and packages in output/, build/, or dist/.
+# Ignore rules do not detect secrets embedded in otherwise trackable files.
+
+# Operating system metadata
+.DS_Store
+.AppleDouble
+._*
+.Spotlight-V100/
+.Trashes/
+Thumbs.db
+Desktop.ini
+
+# Local editor settings and temporary files
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+~$*
+.history/
+
+# Environment files (examples must contain placeholders only)
+.env
+.env.*
+*.env
+!.env.example
+!.env.sample
+!.env.template
+.envrc
+.direnv/
+
+# Credentials, private keys, and local secret stores
+secrets/
+credentials/
+.secrets/
+.ssh/
+.aws/
+.credentials
+.netrc
+.npmrc
+credentials.json
+credentials.*.json
+service-account*.json
+service_account*.json
+*-service-account.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+
+# Local databases and runtime data; SQL schema/migration files stay trackable
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.dump
+*.rdb
+*.aof
+/data/
+/uploads/
+backups/
+dumps/
+
+# Dependencies and Python environments/caches
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+
+# Build outputs and generated artifacts
+build/
+dist/
+output/
+out/
+target/
+.gradle/
+.next/
+.nuxt/
+*.class
+*.jar
+*.war
+*.o
+*.obj
+
+# Logs, caches, temporary files, and generated test reports
+*.log
+*.pid
+*.tmp
+*.bak
+logs/
+.cache/
+.temp/
+tmp/
+temp/
+coverage/
+.coverage
+.coverage.*
+htmlcov/
+playwright-report/
+test-results/
+
+# Documentation compilation intermediates; do not ignore *.pdf or image files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Packaged artifacts and local backup archives
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
