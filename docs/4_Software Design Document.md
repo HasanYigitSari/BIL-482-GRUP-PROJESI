@@ -92,7 +92,7 @@ Current successful acquisition flow:
 
 ### 5.1 System Architecture Diagram (High-Level)
 
-![System Architecture Diagram](./uc04-system-architecture.png)
+![System Architecture Diagram](../_assets/uc04-system-architecture.png)
 
 *Figure 5.1: High-Level System Architecture and Deployment Topology.*
 
@@ -144,7 +144,7 @@ The table retains SRS component IDs and identifies incomplete responsibilities.
 
 ### 6.4 Component Diagrams
 
-![Component Diagram](./uc04-components.png)
+![Component Diagram](../_assets/uc04-components.png)
 
 *Figure 6.4: Subsystem Component and Module Dependencies.*
 
@@ -155,7 +155,7 @@ The component diagram outlines module dependencies across frontend, API, worker,
 
 ### 7.1 Data Model / ER Diagram
 
-![Data Model ER Diagram](./uc04-data-model.png)
+![Data Model ER Diagram](../_assets/uc04-data-model.png)
 
 *Figure 7.1: Entity-Relationship Diagram for UC-04 Replenishment Domain.*
 
@@ -170,7 +170,7 @@ Runtime configuration is in the ignored `backend/.env`; generated logs and proce
 
 ### 7.3 Data Flow Diagrams
 
-![Data Flow Diagram](./uc04-data-flow.png)
+![Data Flow Diagram](../_assets/uc04-data-flow.png)
 
 *Figure 7.3: Data Flow Diagram for UC-04 Background Replenishment.*
 
@@ -199,7 +199,7 @@ UC-04 requires **Adapter, supported by Strategy**. Both remain incomplete.
 | Adapter | `Provider`, registry, `MockProvider`, and normalized result type | Two different supplier contracts and translating adapters. |
 | Strategy | `needs_supply` checks pending orders and a fixed target | Interchangeable policies, validated settings, and agreed demand evaluation. |
 
-![Provider Interface Class Diagram](./uc04-provider-interface.png)
+![Provider Interface Class Diagram](../_assets/uc04-provider-interface.png)
 
 *Figure 8.1: UML Class Diagram for Provider Interface (Adapter Pattern).*
 
