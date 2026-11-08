@@ -12,6 +12,7 @@ Thumbs.db
 Desktop.ini
 
 # Local editor settings and temporary files
+AGENTS.md
 .idea/
 .vscode/
 *.iml
@@ -57,6 +58,7 @@ id_ecdsa
 id_ed25519
 
 # Local databases and runtime data; SQL schema/migration files stay trackable
+.local/
 *.db
 *.db-*
 *.sqlite
@@ -85,6 +87,7 @@ __pycache__/
 .nox/
 
 # Build outputs and generated artifacts
+*.tsbuildinfo
 build/
 dist/
 output/
