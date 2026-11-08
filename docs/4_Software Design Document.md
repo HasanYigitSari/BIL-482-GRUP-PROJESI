@@ -92,7 +92,12 @@ Current successful acquisition flow:
 
 ### 5.1 System Architecture Diagram (High-Level)
 
-A UML deployment diagram showing the browser, Vite proxy, Django API, PostgreSQL, and background worker. Include their communication paths and the local mock-provider boundary.
+![System Architecture Diagram](./uc04-system-architecture.png)
+
+*Figure 5.1: High-Level System Architecture and Deployment Topology.*
+
+**Diagram Description:**
+The high-level architecture diagram illustrates the multi-tier local deployment for UC-04. The client layer consists of a React browser application communicating with the Django REST Framework backend through a Vite development proxy. Transactional persistence and advisory session locks are managed within PostgreSQL, while an independent Python inventory worker handles background procurement directly against the external local MockProvider interface without blocking web application requests.
 
 ### 5.2 Architectural Patterns and Styles
 
@@ -139,13 +144,23 @@ The table retains SRS component IDs and identifies incomplete responsibilities.
 
 ### 6.4 Component Diagrams
 
-A UML component diagram showing the frontend, API, inventory services, worker, provider integration, and persistence modules. Show their dependencies and interfaces.
+![Component Diagram](./uc04-components.png)
+
+*Figure 6.4: Subsystem Component and Module Dependencies.*
+
+**Diagram Description:**
+The component diagram outlines module dependencies across frontend, API, worker, and persistence subsystems. The React UI issues HTTP calls via the frontend API helper to Django REST serializers and views. Business logic is centralized in inventory services, shared by both the API and the background worker loop. The worker delegates supplier validation to the provider registry and MockProvider adapters before writing domain records through Django models to PostgreSQL.
 
 ## 7. Data Design
 
 ### 7.1 Data Model / ER Diagram
 
-An entity-relationship (ER) diagram covering Product, AcquisitionJob, InventoryItem, Order, User, and MockProviderControl. Include key fields, relationship cardinalities, and uniqueness constraints, particularly the optional item assignment for pending orders.
+![Data Model ER Diagram](./uc04-data-model.png)
+
+*Figure 7.1: Entity-Relationship Diagram for UC-04 Replenishment Domain.*
+
+**Diagram Description:**
+The ER diagram details the relational schema governing inventory replenishment and order fulfillment. A `Product` defines the target stock and provider mapping, spawning multiple `AcquisitionJob` instances during background procurement. Completed jobs produce `InventoryItem` records. `Order` records placed by a `User` link optionally (`0..1`) to an `InventoryItem` upon fulfillment, while simulation parameters are controlled via `MockProviderControl`.
 
 ### 7.2 Data Storage (Database or File Structure)
 
@@ -155,7 +170,12 @@ Runtime configuration is in the ignored `backend/.env`; generated logs and proce
 
 ### 7.3 Data Flow Diagrams
 
-A data-flow diagram tracing stock and configuration inputs through replenishment evaluation, supplier acquisition, validation, and storage. Show successful results and failure/retry outcomes, including the status data exposed through the API.
+![Data Flow Diagram](./uc04-data-flow.png)
+
+*Figure 7.3: Data Flow Diagram for UC-04 Background Replenishment.*
+
+**Diagram Description:**
+The data flow diagram traces inventory replenishment from supply evaluation through storage. Current stock levels, pending orders, and product targets are evaluated to create durable `AcquisitionJob` intents. The background worker claims jobs via UUIDs, issues requests to the mock provider, and routes outcomes through result validation. Successful acquisitions atomically commit new items to stock and complete waiting jobs, while errors or retries update job states and emit status to the inventory API.
 
 ### 7.4 Data Validation Rules
 
@@ -179,7 +199,12 @@ UC-04 requires **Adapter, supported by Strategy**. Both remain incomplete.
 | Adapter | `Provider`, registry, `MockProvider`, and normalized result type | Two different supplier contracts and translating adapters. |
 | Strategy | `needs_supply` checks pending orders and a fixed target | Interchangeable policies, validated settings, and agreed demand evaluation. |
 
-A UML class diagram showing the Provider interface, MockProvider, ProviderItem, and their relationships. Extend it with the Adapter and Strategy participants as those patterns are implemented.
+![Provider Interface Class Diagram](./uc04-provider-interface.png)
+
+*Figure 8.1: UML Class Diagram for Provider Interface (Adapter Pattern).*
+
+**Diagram Description:**
+The class diagram demonstrates the structural application of the Adapter pattern for supplier integration. The abstract `Provider` interface declares the standardized `acquire(product_reference, request_id, fail)` contract returning a normalized `ProviderItem`. The concrete `MockProvider` implements this interface, encapsulating provider-specific payload translation and synthetic error handling to isolate backend inventory services from external contract changes.
 
 ### 8.2 Context and Justification
 
