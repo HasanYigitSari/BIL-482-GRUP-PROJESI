@@ -98,7 +98,7 @@ After starting the app, manually:
 
 These are manual scenarios to run after starting the app; static checks do not verify live allocation or migrations.
 
-1. On the account page, wait for **Demo digital link** to show three available. Order once: a link should appear immediately in **My orders**, then stock should return to three. Copy the link; it is deliberately nonfunctional.
+1. On the account page, wait for **Demo digital link** to show three available. Order once. The catalog’s assigned count should rise by one, a link should appear in **My orders**, and replenishment should bring available stock back to three. Copy the link; it is deliberately nonfunctional.
 2. Open **Local simulation**, pause supply, and wait for any underway attempt to finish. Order until stock is empty, then place two more orders. They should remain pending. Refresh: the orders and pause setting should remain.
 3. Resume supply. The oldest pending order should become ready first, then the next; afterward available stock should return to three. Orders are displayed newest first, so compare their order numbers/timestamps.
 4. With full stock, choose **Fail next attempt**, then order. The replacement should enter retry with a five-second delay and then succeed. The resulting stock count should be three, with no duplicate delivered item. Logs show sanitized acquisition IDs/statuses.

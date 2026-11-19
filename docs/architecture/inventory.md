@@ -59,7 +59,7 @@ Future real adapters must support equivalent durable idempotency or reconciliati
 
 | Method and path | Contract |
 | --- | --- |
-| `GET products/` | `{products: [{id, code, name, available_count}]}`. Seeded with one product. |
+| `GET products/` | `{products: [{id, code, name, available_count, assigned_count}]}`. Each count is per product across accounts. Available items have no linked order. Assigned items have one. Pending orders contribute to neither count. |
 | `POST orders/` | Accepts `{product_id, request_id}` (UUID). Returns `{order}` with `201` for a new order or `200` for a replay. Unknown product: `404`; invalid input: `400`; request/product conflict: `409`. |
 | `GET orders/?page=1` | Current user's orders only, newest `(created_at, id)` first, 20 per page: `{count, next, previous, results}`. |
 | `GET demo/inventory/` | `{paused, fail_next, products}`. Each product has `id`, `name`, `target_stock`, `available_count`, `pending_count`, `fulfilled_count`, and `acquisition` or `null`. |
