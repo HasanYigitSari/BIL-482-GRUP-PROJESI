@@ -1,6 +1,6 @@
 import { api, ApiError } from './api';
 
-export type Product = { id: number; code: string; name: string; available_count: number };
+export type Product = { id: number; code: string; name: string; available_count: number; assigned_count: number };
 export type Order = {
   id: number; product_id: number; product_name: string; status: 'pending' | 'fulfilled';
   url: string | null; created_at: string; fulfilled_at: string | null;

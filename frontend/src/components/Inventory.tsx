@@ -305,8 +305,8 @@ export default function Inventory({ userId }: { userId: number }) {
                   </div>
                   <span className={`account-badge stock-badge ${product.available_count > 0 ? 'in-stock' : 'out-of-stock'}`}>
                     {isTr
-                      ? `${product.available_count} adet hazır (${product.available_count} available)`
-                      : `${product.available_count} available`}
+                      ? `${product.available_count} hazır · ${product.assigned_count} tahsis edildi`
+                      : `${product.available_count} available · ${product.assigned_count} assigned`}
                   </span>
                 </div>
 

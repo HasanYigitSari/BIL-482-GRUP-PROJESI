@@ -1,18 +1,16 @@
 from rest_framework import serializers
 
 from api.models import AcquisitionJob, Order, Product
-from .services import ERROR_MESSAGES, available_items
+from .services import ERROR_MESSAGES
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    available_count = serializers.SerializerMethodField()
+    available_count = serializers.IntegerField(read_only=True)
+    assigned_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Product
-        fields = ["id", "code", "name", "available_count"]
-
-    def get_available_count(self, product):
-        return available_items(product).count()
+        fields = ["id", "code", "name", "available_count", "assigned_count"]
 
 
 class PlaceOrderSerializer(serializers.Serializer):

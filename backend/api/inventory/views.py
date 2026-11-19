@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db.models import Count, Q
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -18,7 +19,11 @@ class InventoryView(APIView):
 
 class ProductsView(InventoryView):
     def get(self, request):
-        return Response({"products": ProductSerializer(Product.objects.order_by("id"), many=True).data})
+        products = Product.objects.annotate(
+            available_count=Count("items", filter=Q(items__order__isnull=True)),
+            assigned_count=Count("items__order"),
+        ).order_by("id")
+        return Response({"products": ProductSerializer(products, many=True).data})
 
 
 class OrderPagination(PageNumberPagination):
